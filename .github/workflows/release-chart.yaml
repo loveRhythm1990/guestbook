@@ -29,7 +29,7 @@ jobs:
       - name: Check if Chart version has changed
         id: version_check
         run: |
-          CHART_VERSION=$(yq '.version' ./charts/Chart.yaml)
+          CHART_VERSION=$(yq eval '.version' ./charts/guestbook/Chart.yaml)
           echo "Detected Chart version: $CHART_VERSION"
           # Check if this version exists in the remote OCI registry
           REGISTRY="images.neolink-ai.com/mocloud-charts/guestbook"
