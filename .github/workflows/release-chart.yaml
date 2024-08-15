@@ -43,6 +43,7 @@ jobs:
           else
             echo "Chart version already exists, skipping deployment"
             echo "version_changed=false" >> $GITHUB_ENV
+          fi
 
       - name: Package Helm Chart
         if: env.version_changed == 'true'
