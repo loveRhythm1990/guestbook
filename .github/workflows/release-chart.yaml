@@ -48,7 +48,7 @@ jobs:
       - name: Package Helm Chart
         if: env.version_changed == 'true'
         run: |
-          helm package ./charts --destination ./package
+          helm package ./charts/*
           echo "Chart packaged successfully."
 
       - name: Push to OCI Registry
