@@ -19,7 +19,9 @@ jobs:
           version: v3.12.0  # 选择一个适当的 Helm 版本
 
       - name: Install yq
-        run: sudo apt-get install -y yq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq
 
       - name: Get chart version
         id: chart_version
@@ -48,5 +50,5 @@ jobs:
       - name: Push to OCI Registry
         if: steps.version_changed.outputs.changed == 'true'
         run: |
-          echo ${{ secrets.OCI_REGISTRY_PASSWORD }} | helm registry login -u ${{ secrets.OCI_REGISTRY_USERNAME }} --password-stdin oci://my-private-registry
-          helm push *.tgz oci://my-private-registry/charts/
+          echo ${{ secrets.OCI_REGISTRY_PASSWORD }} | helm registry login -u ${{ secrets.OCI_REGISTRY_USERNAME }} --password-stdin oci://images.neolink-ai.com
+          helm push *.tgz oci://images.neolink-ai.com/mocloud-charts
