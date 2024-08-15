@@ -31,6 +31,9 @@ jobs:
         run: |
           CHART_VERSION=$(yq eval '.version' ./charts/guestbook/Chart.yaml)
           echo "Detected Chart version: $CHART_VERSION"
+          
+          echo ${{ secrets.OCI_REGISTRY_PASSWORD }} | helm registry login -u ${{ secrets.OCI_REGISTRY_USERNAME }} --password-stdin images.neolink-ai.com
+
           # Check if this version exists in the remote OCI registry
           REGISTRY="images.neolink-ai.com/mocloud-charts/guestbook"
           VERSION_EXISTS=$(helm pull oci://$REGISTRY --version $CHART_VERSION --destination /tmp || echo "not found")
@@ -50,5 +53,4 @@ jobs:
       - name: Push to OCI Registry
         if: env.version_changed == 'true'
         run: |
-          echo ${{ secrets.OCI_REGISTRY_PASSWORD }} | helm registry login -u ${{ secrets.OCI_REGISTRY_USERNAME }} --password-stdin images.neolink-ai.com
           helm push *.tgz oci://images.neolink-ai.com/mocloud-charts
